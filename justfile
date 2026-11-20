@@ -1,4 +1,5 @@
 uuid := 'super-voice@super-libre.github.io'
+name := 'super-gnome-shell-extension'
 schema := 'org.gnome.shell.extensions.super-voice'
 zip := 'dist/' + uuid + '.shell-extension.zip'
 
@@ -40,6 +41,40 @@ pack: build
     gnome-extensions pack build --force --out-dir=dist \
         --extra-source=core --extra-source=shell --extra-source=icons
     @echo "{{ zip }}"
+
+# Fail unless `tag` names the version in metadata.json and package.json,
+# which must agree. A release's tag must.
+check-tag tag:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    version=$(jq -r '."version-name"' metadata.json)
+    package=$(jq -r .version package.json)
+    if [ "$version" != "$package" ]; then
+        echo "metadata.json's version-name, $version, and package.json's version, $package, differ." >&2
+        exit 1
+    fi
+    if [ '{{ tag }}' != "v$version" ]; then
+        echo "Tag {{ tag }} does not match the version, $version. Tag v$version, or bump the version first." >&2
+        exit 1
+    fi
+    echo "Tag {{ tag }} matches metadata.json and package.json."
+
+# Build the tarball a release publishes, into dist/:
+# super-gnome-shell-extension-noarch[-beta].tar.gz, holding the extension's
+# directory with its settings schema compiled, as super-engine's installer
+# places it system-wide, where nothing compiles it the way `gnome-extensions
+# install` does. A prerelease `tag` (one with a `-`, like v0.2.0-beta.1) gets
+# the -beta suffix.
+package tag='': build
+    #!/usr/bin/env bash
+    set -euo pipefail
+    glib-compile-schemas --strict build/schemas
+    suffix=''
+    case '{{ tag }}' in v*-*) suffix='-beta' ;; esac
+    mkdir -p dist
+    tarball="dist/{{ name }}-noarch$suffix.tar.gz"
+    tar -czf "$tarball" --sort=name --owner=0 --group=0 --numeric-owner -C build .
+    echo "$tarball"
 
 # Everything CI runs
 ci: fmt-check check test pack

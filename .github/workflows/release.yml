@@ -1,0 +1,98 @@
+name: Release
+
+# Publishes a release of the extension for each version tag, which Super
+# Voice's installer then installs:
+#
+# 1. v0.1.0 publishes a release, with super-gnome-shell-extension-noarch.tar.gz.
+# 2. A tag with a prerelease part, like v0.2.0-beta.1, publishes a
+#    prerelease, with super-gnome-shell-extension-noarch-beta.tar.gz. Only an
+#    install on the beta channel takes it.
+#
+# Each release carries a SHA256SUMS the installer checks the tarball against.
+# The tag must match the version in metadata.json and package.json.
+#
+# Running it by hand builds the tarball without publishing anything.
+
+on:
+    push:
+        tags:
+            - "v*"
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    build:
+        name: Build the tarball
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: taiki-e/install-action@v2.90.6
+              with:
+                  tool: just
+
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: 26
+                  cache: npm
+
+            # glib-compile-schemas, for the schema the tarball carries compiled.
+            - name: Install system dependencies
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y libglib2.0-bin
+
+            - run: just deps
+
+            - name: Check the tag against the version
+              if: startsWith(github.ref, 'refs/tags/')
+              run: just check-tag "$GITHUB_REF_NAME"
+
+            # The same gate as CI, so a release is never what CI would refuse.
+            - name: Lint, type-check and test
+              run: just fmt-check check test
+
+            - name: Build the tarball
+              run: |
+                  tag=''
+                  if [[ "$GITHUB_REF" == refs/tags/* ]]; then tag="$GITHUB_REF_NAME"; fi
+                  just package "$tag"
+
+            - uses: actions/upload-artifact@v7
+              with:
+                  name: super-gnome-shell-extension
+                  path: dist/*.tar.gz
+                  if-no-files-found: error
+
+    publish:
+        name: Publish the release
+        needs: build
+        if: startsWith(github.ref, 'refs/tags/')
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/download-artifact@v8
+              with:
+                  path: artifacts
+
+            - name: Generate SHA256SUMS
+              run: |
+                  shopt -s globstar nullglob
+                  : > SHA256SUMS
+                  for f in artifacts/**/*.tar.gz; do
+                    (cd "$(dirname "$f")" && sha256sum "$(basename "$f")") >> SHA256SUMS
+                  done
+                  cat SHA256SUMS
+
+            - uses: softprops/action-gh-release@v3
+              with:
+                  files: |
+                      artifacts/**/*.tar.gz
+                      SHA256SUMS
+                  draft: false
+                  prerelease: ${{ contains(github.ref_name, '-') }}
+                  generate_release_notes: true
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

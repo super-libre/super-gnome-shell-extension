@@ -44,14 +44,31 @@ update to GNOME Shell replaces that binary, and the daemon then asks again.
 
 ## Install
 
+Each [release](https://github.com/super-libre/super-gnome-shell-extension/releases)
+carries the extension as `super-gnome-shell-extension-noarch.tar.gz`
+(`-noarch-beta` for a prerelease), with a `SHA256SUMS`. The tarball holds the
+extension's directory, its settings schema compiled, for an installer to place
+in `/usr/local/share/gnome-shell/extensions/super-voice@super-libre.github.io`,
+where GNOME Shell finds extensions for every user. Super Voice's installer
+takes it from there.
+
+From source, for this user:
+
 ```sh
 just install     # build, pack and install for this user
 ```
 
-Log out and back in (Wayland can't restart GNOME Shell in place), then enable
-it in the Extensions app or with
+Either way, log out and back in (Wayland can't restart GNOME Shell in place),
+then enable it in the Extensions app or with
 `gnome-extensions enable super-voice@super-libre.github.io`. Settings live in
 the menu and in the Extensions app's preferences for it, which stay in step.
+
+### Release
+
+Bump `version-name` in `metadata.json` and `version` in `package.json`, then
+push a tag that names it, like `v0.1.0`, or `v0.2.0-beta.1` for a prerelease.
+The release workflow checks the tag against both, runs CI's checks, builds the
+tarball with `just package`, and publishes it.
 
 ## Develop
 
@@ -63,6 +80,7 @@ formats; vitest tests. Run every check through `just`:
 just deps        # install the pinned tools
 just ci          # formatting, lints, types, tests, build and pack
 just test
+just package     # the tarball a release publishes, in dist/
 just smoke       # drive it in a headless GNOME Shell, screenshots in screenshots/
 just run         # try it in a nested GNOME Shell window, against your daemon
 ```

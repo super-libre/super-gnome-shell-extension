@@ -27,21 +27,6 @@ It runs on GNOME Shell 50 and 51, and needs nothing but the Super Voice daemon:
 it talks to the daemon over its Unix socket itself, with one session for both
 features.
 
-## Permission
-
-The daemon asks you once whether to let the extension see what it is doing.
-The daemon identifies a client by its binary, and an extension runs inside
-GNOME Shell, so the prompt asks whether GNOME Shell may have access. It can't
-tell one extension from another, so allowing it lets every extension see
-Super Voice's recording and playback events and levels, nothing more. An
-update to GNOME Shell replaces that binary, and the daemon then asks again.
-
-> [!IMPORTANT]
-> On GNOME the prompt opens as an ordinary window, from Super Voice's releases
-> after 0.3.0-beta.7. Earlier releases show it only on desktops with
-> layer-shell, which GNOME doesn't have: there the menu reports the request as
-> unanswered and asks again.
-
 ## Install
 
 ```sh

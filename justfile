@@ -28,6 +28,28 @@ fmt:
 test *args:
     npx vitest run {{ args }}
 
+# Run the tests and measure their coverage of src/core, the code they reach
+# under Node: a summary here, and the HTML report, coverage-summary.json and
+# lcov.info in coverage/.
+coverage:
+    npx vitest run --coverage
+
+# Write coverage/coverage.json, the shields.io endpoint the README's badge
+# reads from GitHub Pages: the line coverage `just coverage` measured.
+coverage-badge: coverage
+    #!/usr/bin/env bash
+    set -euo pipefail
+    pct=$(jq -r '.total.lines.pct' coverage/coverage-summary.json)
+    if   awk "BEGIN{exit !($pct>=90)}"; then color=brightgreen
+    elif awk "BEGIN{exit !($pct>=75)}"; then color=green
+    elif awk "BEGIN{exit !($pct>=60)}"; then color=yellow
+    elif awk "BEGIN{exit !($pct>=40)}"; then color=orange
+    else color=red
+    fi
+    printf '{"schemaVersion":1,"label":"coverage","message":"%.1f%%","color":"%s"}\n' \
+        "$pct" "$color" > coverage/coverage.json
+    cat coverage/coverage.json
+
 # Compile to build/, laid out as the extension's directory
 build:
     rm -rf build
@@ -119,4 +141,4 @@ speech-fixture recording:
 
 # Remove build output
 clean:
-    rm -rf build dist screenshots
+    rm -rf build dist screenshots coverage

@@ -31,16 +31,16 @@ features.
 
 The daemon asks you once whether to let the extension see what it is doing.
 The daemon identifies a client by its binary, and an extension runs inside
-GNOME Shell, so the request names `/usr/bin/gnome-shell`. Allowing it lets
-GNOME Shell's extensions see Super Voice's recording and playback events and
-levels, nothing more. An update to GNOME Shell replaces that binary, and the
-daemon then asks again.
+GNOME Shell, so the prompt asks whether GNOME Shell may have access. It can't
+tell one extension from another, so allowing it lets every extension see
+Super Voice's recording and playback events and levels, nothing more. An
+update to GNOME Shell replaces that binary, and the daemon then asks again.
 
 > [!IMPORTANT]
-> Super Voice's permission prompt is a layer-shell surface, which GNOME
-> doesn't support, so on GNOME it can't appear yet. Until it can fall back to
-> an ordinary window, the menu reports the request as unanswered and asks
-> again.
+> On GNOME the prompt opens as an ordinary window, from Super Voice's releases
+> after 0.3.0-beta.7. Earlier releases show it only on desktops with
+> layer-shell, which GNOME doesn't have: there the menu reports the request as
+> unanswered and asks again.
 
 ## Install
 

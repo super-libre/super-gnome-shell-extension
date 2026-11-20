@@ -41,10 +41,66 @@ jobs:
             - name: Lint and type-check
               run: just check
 
+            # The tests, measuring their coverage of src/core.
             - name: Run tests
-              run: just test
+              run: just coverage
+
+            - uses: actions/upload-artifact@v7
+              with:
+                  name: coverage-lcov
+                  path: coverage/lcov.info
 
             # The runner has no GNOME Shell 50 to pack or run it with: packing
             # (`just pack`) and the headless shell (`just smoke`) run locally.
             - name: Build
               run: just build
+
+    # Publish the HTML coverage report, with the badge's coverage.json beside
+    # it, to GitHub Pages (main only), at
+    # https://super-libre.github.io/super-gnome-shell-extension/.
+    # One-time setup: repo Settings → Pages → Source = "GitHub Actions".
+    coverage-pages:
+        name: Coverage (Pages)
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
+        # Serialize deploys; never cancel an in-flight Pages deployment.
+        concurrency:
+            group: pages
+            cancel-in-progress: false
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: taiki-e/install-action@v2.90.6
+              with:
+                  tool: just
+
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: 26
+                  cache: npm
+
+            - run: just deps
+
+            # The HTML report, and the shields.io endpoint the README's badge
+            # reads, so the badge needs no Gist or token. jq ships on the
+            # runner.
+            - name: Measure coverage and write the badge
+              run: just coverage-badge
+
+            - uses: actions/configure-pages@v6
+
+            - uses: actions/upload-pages-artifact@v5
+              with:
+                  path: coverage
+
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v5

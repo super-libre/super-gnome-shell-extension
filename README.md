@@ -1,5 +1,7 @@
 # Super Voice for GNOME
 
+[![coverage](https://img.shields.io/endpoint?url=https://super-libre.github.io/super-gnome-shell-extension/coverage.json)](https://super-libre.github.io/super-gnome-shell-extension/)
+
 <img src="icons/super-voice.svg" width="96" height="96" alt="Super Voice">
 
 A GNOME Shell extension for [Super Voice](https://github.com/jorge-menjivar/super-voice),
@@ -65,6 +67,7 @@ formats; vitest tests. Run every check through `just`:
 just deps        # install the pinned tools
 just ci          # formatting, lints, types, tests, build and pack
 just test
+just coverage    # the tests' coverage of src/core, the HTML report in coverage/
 just package     # the tarball a release publishes, in dist/
 just smoke       # drive it in a headless GNOME Shell, screenshots in screenshots/
 just run         # try it in a nested GNOME Shell window, against your daemon

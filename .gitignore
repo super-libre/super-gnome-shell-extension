@@ -2,6 +2,7 @@
 /dist
 /build
 /screenshots
+/coverage
 /tools/palette-golden/src/palette.rs
 /tools/palette-golden/target
 /tools/palette-golden/Cargo.lock

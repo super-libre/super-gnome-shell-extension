@@ -1,0 +1,21 @@
+{
+    "name": "super-gnome-shell-extension",
+    "version": "0.1.0",
+    "private": true,
+    "description": "GNOME Shell extension for Super Voice: what speech to text and text to speech are doing, in the top bar",
+    "license": "GPL-3.0-only",
+    "author": "Jorge Menjivar <jorge@menjivar.ai>",
+    "repository": "github:super-libre/super-gnome-shell-extension",
+    "type": "module",
+    "engines": {
+        "node": ">=24"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.6.8",
+        "@girs/gnome-shell": "51.0.1",
+        "@girs/soup-3.0": "5.6.0",
+        "@types/node": "26.6.6",
+        "typescript": "7.0.2",
+        "vitest": "5.1.1"
+    }
+}

@@ -1,0 +1,9 @@
+/node_modules
+/dist
+/build
+/screenshots
+/tools/palette-golden/src/palette.rs
+/tools/palette-golden/target
+/tools/palette-golden/Cargo.lock
+/tools/speech-bands/target
+/tools/speech-bands/Cargo.lock

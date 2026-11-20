@@ -1,0 +1,27 @@
+{
+    // GJS loads each emitted file as an ES module, so tsc writes one .js per .ts
+    // and nothing bundles them: a bundler would inline the @girs runtime stubs,
+    // which pin `gi://St?version=51` and so break the extension on GNOME 50.
+    "compilerOptions": {
+        // GJS 1.88 runs SpiderMonkey 140. No "DOM": GJS has no browser globals
+        // beyond the few @girs/gjs/dom declares.
+        "target": "ES2024",
+        "lib": ["ES2024"],
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "types": [],
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "noFallthroughCasesInSwitch": true,
+        "exactOptionalPropertyTypes": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "rootDir": "src",
+        "outDir": "build",
+        "removeComments": false,
+        "noEmitOnError": true
+    },
+    "include": ["src/**/*.ts", "ambient.d.ts"]
+}

@@ -1,0 +1,50 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+permissions:
+    contents: read
+
+# A newer push to a pull request makes its older run moot.
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+    check:
+        name: Lint, types and tests
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: taiki-e/install-action@v2.90.6
+              with:
+                  tool: just
+
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: 26
+                  cache: npm
+
+            - run: just deps
+
+            - name: Check formatting
+              run: just fmt-check
+
+            # Biome's lints, including the import boundaries, and tsc over the
+            # extension and the tests.
+            - name: Lint and type-check
+              run: just check
+
+            - name: Run tests
+              run: just test
+
+            # The runner has no GNOME Shell 50 to pack or run it with: packing
+            # (`just pack`) and the headless shell (`just smoke`) run locally.
+            - name: Build
+              run: just build

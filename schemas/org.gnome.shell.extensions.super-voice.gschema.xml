@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<!-- The defaults are the COSMIC applet's, except that the extension sits
+     around the clock and hides its icon. src/core/settings.ts names the same
+     keys, choices and defaults, and tests/core/settings.test.ts checks the two
+     agree. -->
+<schemalist gettext-domain="super-voice">
+  <schema id="org.gnome.shell.extensions.super-voice" path="/org/gnome/shell/extensions/super-voice/">
+    <key name="position" type="s">
+      <choices>
+        <choice value="clock"/>
+        <choice value="status-area"/>
+      </choices>
+      <default>'clock'</default>
+      <summary>Position</summary>
+      <description>Where in the top bar Super Voice is. Around the clock, it draws two halves, one each side of the clock, that read as one picture. In the status area, it draws the whole picture beside the system icons.</description>
+    </key>
+    <key name="visualization-style" type="s">
+      <choices>
+        <choice value="pulse"/>
+        <choice value="bottom-equalizer"/>
+        <choice value="centered-equalizer"/>
+        <choice value="waveform"/>
+      </choices>
+      <default>'centered-equalizer'</default>
+      <summary>Visualization style</summary>
+      <description>How live audio is drawn: one pulse, an equalizer, centered bars, or a waveform.</description>
+    </key>
+    <key name="working-animation" type="s">
+      <choices>
+        <choice value="droplet"/>
+        <choice value="comet"/>
+        <choice value="dots"/>
+      </choices>
+      <default>'droplet'</default>
+      <summary>Loading animation</summary>
+      <description>What is drawn while Super Voice transcribes, or prepares the first audio of speech.</description>
+    </key>
+    <key name="palette" type="s">
+      <choices>
+        <choice value="accent"/>
+        <choice value="sunset"/>
+        <choice value="synthwave"/>
+        <choice value="nebula"/>
+        <choice value="aurora"/>
+        <choice value="candy"/>
+        <choice value="glacier"/>
+        <choice value="rose"/>
+        <choice value="ember-and-ash"/>
+        <choice value="citrus-and-sea"/>
+        <choice value="harbor"/>
+        <choice value="fern-and-plum"/>
+        <choice value="graphite"/>
+      </choices>
+      <default>'sunset'</default>
+      <summary>Colors</summary>
+      <description>The pair of gradients speech to text and text to speech are drawn in. Accent builds the pair from the system accent color.</description>
+    </key>
+    <key name="show-icon" type="b">
+      <default>false</default>
+      <summary>Show icon</summary>
+      <description>Show the Super Voice icon while nothing is happening. Off leaves the space empty, though it still opens the menu.</description>
+    </key>
+    <key name="icon-alignment" type="s">
+      <choices>
+        <choice value="start"/>
+        <choice value="center"/>
+        <choice value="end"/>
+      </choices>
+      <default>'end'</default>
+      <summary>Icon position</summary>
+      <description>Where the icon sits in the space the visualization takes.</description>
+    </key>
+    <key name="show-visualization" type="b">
+      <default>true</default>
+      <summary>Show visualization</summary>
+      <description>Draw live audio and the loading animation. Off keeps the indicator to the icon.</description>
+    </key>
+    <key name="applet-width" type="i">
+      <range min="60" max="300"/>
+      <default>120</default>
+      <summary>Visualization size</summary>
+      <description>How wide the visualization is, in pixels.</description>
+    </key>
+  </schema>
+</schemalist>

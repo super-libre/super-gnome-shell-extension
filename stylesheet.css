@@ -1,0 +1,115 @@
+/* SPDX-License-Identifier: GPL-3.0-only */
+
+/* The top-bar button. Its box's width is set in code, from the settings. */
+.super-voice-box {
+    min-height: 16px;
+}
+
+/* The menu. */
+.super-voice-menu {
+    min-width: 22em;
+}
+
+.super-voice-title {
+    font-weight: bold;
+}
+
+.super-voice-version,
+.super-voice-caption,
+.super-voice-status-detail {
+    font-size: smaller;
+    color: rgba(127, 127, 127, 1);
+}
+
+.super-voice-status {
+    spacing: 4px;
+}
+
+.super-voice-status-title {
+    font-weight: bold;
+}
+
+.super-voice-icon-button {
+    padding: 6px;
+    border-radius: 99px;
+}
+
+.super-voice-icon-button:hover,
+.super-voice-icon-button:focus {
+    background-color: rgba(127, 127, 127, 0.2);
+}
+
+/* Icon Position: a row of buttons, the chosen one in the accent color. */
+.super-voice-segmented {
+    spacing: 2px;
+}
+
+.super-voice-segment {
+    padding: 4px 10px;
+    border-radius: 6px;
+    background-color: rgba(127, 127, 127, 0.12);
+}
+
+.super-voice-segment:hover,
+.super-voice-segment:focus {
+    background-color: rgba(127, 127, 127, 0.24);
+}
+
+.super-voice-segment:checked {
+    background-color: -st-accent-color;
+    color: -st-accent-fg-color;
+}
+
+.super-voice-size .slider {
+    margin-top: 6px;
+}
+
+/* The color picker. */
+.super-voice-colors-column {
+    spacing: 8px;
+}
+
+.super-voice-legend-entry {
+    spacing: 6px;
+}
+
+.super-voice-accent-choice {
+    padding: 4px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(127, 127, 127, 0.24);
+    background-color: rgba(127, 127, 127, 0.06);
+}
+
+.super-voice-accent-choice:hover,
+.super-voice-accent-choice:focus {
+    background-color: rgba(127, 127, 127, 0.16);
+}
+
+.super-voice-accent-choice:checked {
+    border: 2px solid -st-accent-color;
+}
+
+.super-voice-accent-text {
+    padding-left: 10px;
+}
+
+.super-voice-swatch-row {
+    spacing: 2px;
+}
+
+/* A ring of the accent color, 4px out, marks the chosen palette. The ring is
+   always there, transparent, so choosing doesn't shift anything. */
+.super-voice-swatch {
+    padding: 2px;
+    border-radius: 99px;
+    border: 2px solid transparent;
+}
+
+.super-voice-swatch:hover,
+.super-voice-swatch:focus {
+    border-color: rgba(127, 127, 127, 0.4);
+}
+
+.super-voice-swatch:checked {
+    border-color: -st-accent-color;
+}

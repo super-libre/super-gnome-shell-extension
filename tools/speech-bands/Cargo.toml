@@ -1,0 +1,18 @@
+# Turns a recording of speech into the frequency bands Super Voice's daemon
+# would send for it, as `tests/fixtures/speech-bands.json`: the engine's own
+# analyzer, over the same 1024-sample windows the daemon uses. The fake
+# daemon replays them, so the visualization is tested with real speech rather
+# than a made-up spectrum. Run it with `just speech-fixture <recording>`.
+[package]
+name = "speech-bands"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+base64 = "0.22.1"
+serde_json = "1.0.149"
+# The rev the COSMIC applet pins, and with it Super Voice.
+super-engine-protocol = { git = "https://github.com/super-libre/super-engine", rev = "79e3ceace42d9492c60277abfaa4c08b63cf3fdb", features = ["analysis"] }
+
+[workspace]

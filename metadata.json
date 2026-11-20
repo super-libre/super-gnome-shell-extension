@@ -1,0 +1,9 @@
+{
+    "uuid": "super-voice@super-libre.github.io",
+    "name": "Super Voice",
+    "description": "What Super Voice's speech to text and text to speech are doing, in the top bar: your microphone while you dictate, the speech while it plays, and a working animation while it transcribes or prepares the first audio. Needs the Super Voice daemon.",
+    "shell-version": ["50", "51"],
+    "url": "https://github.com/super-libre/super-gnome-shell-extension",
+    "settings-schema": "org.gnome.shell.extensions.super-voice",
+    "version-name": "0.1.0"
+}

@@ -1,0 +1,18 @@
+# Dumps the COSMIC applet's palette, computed by the applet's own
+# `src/models/palette.rs`, as `tests/fixtures/palette.json`. The extension's
+# palette is a port of that file, and its tests check every stop against this
+# dump. Run it with `just palette-fixture <path to super-cosmic-applet>`, which
+# copies palette.rs and the applet's Cargo.lock in first.
+[package]
+name = "palette-golden"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# The libcosmic the applet pins, for the `Color` type palette.rs builds with.
+libcosmic = { git = "https://github.com/pop-os/libcosmic.git", rev = "ef162b8e16ba4493e05c169cd56c7b9f77f0fda5", default-features = false, features = ["default", "applet", "tokio"] }
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.149"
+
+[workspace]

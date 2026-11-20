@@ -1,0 +1,121 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.6.8/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "includes": [
+            "**",
+            "!package-lock.json",
+            "!tests/fixtures",
+            "!icons",
+            "!tools/palette-golden/target"
+        ]
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 100
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single"
+        },
+        "globals": ["global", "log", "logError", "print", "imports"]
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "preset": "recommended"
+        }
+    },
+    "overrides": [
+        {
+            "includes": ["**/*.css"],
+            "linter": {
+                "enabled": false
+            }
+        },
+        {
+            "includes": ["src/core/**"],
+            "linter": {
+                "rules": {
+                    "style": {
+                        "noRestrictedImports": {
+                            "level": "error",
+                            "options": {
+                                "patterns": [
+                                    {
+                                        "group": ["gi://*", "resource://*"],
+                                        "message": "src/core is plain TypeScript, tested under Node: it can't import GNOME modules. Pass what it needs in from src/shell."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "includes": ["src/shell/**"],
+            "linter": {
+                "rules": {
+                    "style": {
+                        "noRestrictedImports": {
+                            "level": "error",
+                            "options": {
+                                "patterns": [
+                                    {
+                                        "group": ["gi://Gtk*", "gi://Adw*", "gi://Gdk*"],
+                                        "message": "GTK runs in the preferences process, never in gnome-shell."
+                                    },
+                                    {
+                                        "group": ["resource:///org/gnome/Shell/Extensions/*"],
+                                        "message": "That module belongs to the preferences process."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "includes": ["src/prefs.ts", "src/prefs/**"],
+            "linter": {
+                "rules": {
+                    "style": {
+                        "noRestrictedImports": {
+                            "level": "error",
+                            "options": {
+                                "patterns": [
+                                    {
+                                        "group": [
+                                            "gi://St*",
+                                            "gi://Clutter*",
+                                            "gi://Meta*",
+                                            "gi://Shell*",
+                                            "resource:///org/gnome/shell/*"
+                                        ],
+                                        "message": "The preferences window runs outside gnome-shell, where its modules don't exist."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "assist": {
+        "enabled": true,
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    }
+}

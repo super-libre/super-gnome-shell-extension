@@ -7,8 +7,8 @@
 #     tools/smoke.sh <extension zip> <uuid> <settings schema>
 #
 # Everything the shell reads or writes is kept in a directory of its own:
-# its settings, extensions, cache and the token the extension stores. The
-# real session and the real daemon are never touched.
+# its settings, extensions, cache, runtime directory and the token the
+# extension stores. The real session and the real daemon are never touched.
 set -euo pipefail
 
 zip=$(realpath "$1")
@@ -23,6 +23,12 @@ if [[ "${SMOKE_INSIDE:-}" != 1 ]]; then
     root=$(mktemp -d -p "${XDG_RUNTIME_DIR:-/tmp}" svx-smoke.XXXX)
     trap 'pkill -f "fake-daemon.ts $root/" 2>/dev/null || true; rm -rf "$root"' EXIT
     export SMOKE_ROOT=$root
+    # The runtime directory too, before the private bus starts: the bus hands
+    # it to every service it activates. On the real one, the document portal
+    # the shell's portal activates unmounts the session's own
+    # $XDG_RUNTIME_DIR/doc as it exits, which breaks the Flatpak apps and
+    # panel applets running there. mktemp made it 0700, as the spec asks.
+    export XDG_RUNTIME_DIR=$root
     export XDG_DATA_HOME=$root/data XDG_CONFIG_HOME=$root/config
     export XDG_CACHE_HOME=$root/cache XDG_STATE_HOME=$root/state
     export GSETTINGS_BACKEND=keyfile
